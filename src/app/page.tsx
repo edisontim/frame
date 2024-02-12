@@ -9,17 +9,20 @@ const frameMetadata = getFrameMetadata({
     },
   ],
   image: "https://build-onchain-apps.vercel.app/release/v-0-17.png",
-  postUrl: "https://build-onchain-apps.vercel.app/api/frame",
+  postUrl: `${process.env.NEXT_PUBLIC_BASE_URL}`,
 });
 
 // Step 3. Add your metadata in the Next.js metadata utility
 export const metadata: Metadata = {
-  manifest: "/manifest.json",
   other: {
     ...frameMetadata,
   },
 };
 
 export default function Page() {
-  return <></>;
+  return (
+    <>
+      <h1>frame</h1>
+    </>
+  );
 }
