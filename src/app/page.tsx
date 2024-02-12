@@ -9,11 +9,18 @@ const frameMetadata = getFrameMetadata({
     },
   ],
   image: "https://build-onchain-apps.vercel.app/release/v-0-17.png",
-  postUrl: `${process.env.NEXT_PUBLIC_BASE_URL}`,
+  postUrl: `https://frame-five-sigma.vercel.app/`,
 });
 
 // Step 3. Add your metadata in the Next.js metadata utility
 export const metadata: Metadata = {
+  title: "Cosmic Cowboys",
+  description: "A frame telling the story of Cosmic Cowboys",
+  openGraph: {
+    title: "Cosmic Cowboys",
+    description: "A frame telling the story of Cosmic Cowboys",
+    images: [`https://build-onchain-apps.vercel.app/release/v-0-17.png`],
+  },
   other: {
     ...frameMetadata,
   },
