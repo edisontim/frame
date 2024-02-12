@@ -65,7 +65,7 @@ export default async function Home({
           style={{ display: "flex", flexDirection: "column" }}
           tw="w-full h-full bg-slate-700 text-white justify-center items-center"
         >
-          <p>let's keep this at 420: </p>
+          <p>lets keep this at 420: </p>
           <br />
           <p>{state.score}</p>
         </div>
