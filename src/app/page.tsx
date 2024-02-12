@@ -1,17 +1,25 @@
-import Image from "next/image";
+import { getFrameMetadata } from "@coinbase/onchainkit";
+import type { Metadata } from "next";
 
-export default function Home() {
-  return (
-    <>
-      <meta property="fc:frame" content="vNext" />
-      <meta
-        property="fc:frame:image"
-        content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyLTD-EEs8bxwuZtNSWPEROeaAu3FvGnlGQ6BhxGc4fuuphh9jJz1OWtJQII7BMUlrCHA&usqp=CAU"
-      />
-      <meta property="fc:frame:button:1" content="Green" />
-      <meta property="fc:frame:button:2" content="Purple" />
-      <meta property="fc:frame:button:3" content="Red" />
-      <meta property="fc:frame:button:4" content="Blue" />
-    </>
-  );
+// Step 2. Use getFrameMetadata to shape your Frame metadata
+const frameMetadata = getFrameMetadata({
+  buttons: [
+    {
+      label: "We love BOAT",
+    },
+  ],
+  image: "https://build-onchain-apps.vercel.app/release/v-0-17.png",
+  postUrl: "https://build-onchain-apps.vercel.app/api/frame",
+});
+
+// Step 3. Add your metadata in the Next.js metadata utility
+export const metadata: Metadata = {
+  manifest: "/manifest.json",
+  other: {
+    ...frameMetadata,
+  },
+};
+
+export default function Page() {
+  return <></>;
 }
