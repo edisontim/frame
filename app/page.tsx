@@ -36,7 +36,8 @@ export default async function Home({
     hubHttpUrl:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000/debug/hub"
-        : undefined,
+        : "https://www.noderpc.xyz/farcaster-mainnet-hub",
+    fetchHubContext: true,
   });
 
   if (frameMessage && !frameMessage?.isValid) {
