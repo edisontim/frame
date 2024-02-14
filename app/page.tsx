@@ -16,6 +16,9 @@ const openAi = new OpenAI();
 const HAPPY_URL = "https://i.ibb.co/Qmr7ChQ/happy.jpg";
 const SAD_URL = "https://i.ibb.co/YP4YzvG/sad.jpg";
 
+const HAPPY_IMG = "happy.jpeg";
+const SAD_IMG = "sad.jpg";
+
 type State = {
   score: number;
 };
@@ -50,14 +53,10 @@ export default async function Home({
     throw new Error("Invalid frame payload");
   }
 
-  const [state, dispatch] = useFramesReducer<State>(
-    reducer,
-    initialState,
-    previousFrame
-  );
+  const [state] = useFramesReducer<State>(reducer, initialState, previousFrame);
 
   const gptCompletion = await await openAi.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: "gpt-4-turbo-preview",
     messages: [
       {
         role: "system",
@@ -73,14 +72,17 @@ export default async function Home({
   let upEmoji = "";
   let downEmoji = "";
   let imgUrl = HAPPY_URL;
+  let img = HAPPY_IMG;
   if (state.score > 420) {
     upEmoji = "😈";
     downEmoji = "😇";
     imgUrl = SAD_URL;
+    img = SAD_IMG;
   } else if (state.score < 420) {
     upEmoji = "😇";
     downEmoji = "😈";
     imgUrl = SAD_URL;
+    img = SAD_IMG;
   }
 
   return (
@@ -95,7 +97,11 @@ export default async function Home({
         <FrameImage>
           <div
             style={{
-              backgroundImage: `url(${imgUrl})`,
+              backgroundImage: `url(${
+                process.env.PUBLIC_URL
+                  ? process.env.PUBLIC_URL
+                  : "http://localhost:3000"
+              }/${img})`,
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
             }}
