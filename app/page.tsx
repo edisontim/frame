@@ -17,7 +17,7 @@ const HAPPY_URL = "https://i.ibb.co/Qmr7ChQ/happy.jpg";
 const SAD_URL = "https://i.ibb.co/YP4YzvG/sad.jpg";
 
 const HAPPY_IMG = "happy.jpeg";
-const SAD_IMG = "sad.jpg";
+const SAD_IMG = "sad.jpeg";
 
 type State = {
   score: number;
