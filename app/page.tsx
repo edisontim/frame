@@ -57,7 +57,7 @@ export default async function Home({
   );
 
   const gptCompletion = await await openAi.chat.completions.create({
-    model: "gpt-4-turbo-preview",
+    model: "gpt-3.5-turbo",
     messages: [
       {
         role: "system",
