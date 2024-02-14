@@ -8,7 +8,13 @@ import {
   getPreviousFrame,
   useFramesReducer,
 } from "frames.js/next/server";
-import Link from "next/link";
+
+import { OpenAI } from "openai";
+
+const openAi = new OpenAI();
+
+const HAPPY_URL = "https://i.ibb.co/Qmr7ChQ/happy.jpg";
+const SAD_URL = "https://i.ibb.co/YP4YzvG/sad.jpg";
 
 type State = {
   score: number;
@@ -50,9 +56,32 @@ export default async function Home({
     previousFrame
   );
 
-  // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
-  // example: load the users credentials & check they have an NFT
-  console.log("info: state is:", state);
+  const gptCompletion = await await openAi.chat.completions.create({
+    model: "gpt-4-1106-preview",
+    messages: [
+      {
+        role: "system",
+        content: `Imagine that you're a number and your wellbeing depends on whether or not that you are at 420. I control a button that makes you go higher or lower. All you can do is output a dramatic sentence (do not go over 20 words) that expresses your wellbeing and state of mind. The user will give you the score you were before my press and the score you are after my press.`,
+      },
+      {
+        role: "user",
+        content: `The previous number was ${previousFrame.prevState?.score} and your current number is ${state.score}`,
+      },
+    ],
+  });
+
+  let upEmoji = "";
+  let downEmoji = "";
+  let imgUrl = HAPPY_URL;
+  if (state.score > 420) {
+    upEmoji = "😈";
+    downEmoji = "😇";
+    imgUrl = SAD_URL;
+  } else if (state.score < 420) {
+    upEmoji = "😇";
+    downEmoji = "😈";
+    imgUrl = SAD_URL;
+  }
 
   return (
     <div>
@@ -65,20 +94,36 @@ export default async function Home({
       >
         <FrameImage>
           <div
-            style={{ display: "flex", flexDirection: "column" }}
-            tw="w-full h-full bg-slate-700 text-white justify-center items-center"
+            style={{
+              backgroundImage: `url(${imgUrl})`,
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+            }}
+            tw="w-full h-full text-black flex flex-col justify-center items-center"
           >
-            <p>lets keep this at 420: </p>
-            <br />
-            <p>{state.score}</p>
+            <p style={{ background: "white" }}>lets keep this at 420: </p>
+            <p
+              style={{
+                fontSize: "1.5em",
+                fontWeight: "bold",
+                background: "white",
+              }}
+            >
+              {state.score}
+            </p>
+            <p
+              style={{
+                maxWidth: "60vw",
+                textAlign: "center",
+                background: "white",
+              }}
+            >
+              {gptCompletion.choices[0]?.message.content}
+            </p>
           </div>
         </FrameImage>
-        <FrameButton>{`🔽${
-          state.score >= 420 ? (state.score == 420 ? "" : "😇") : "😈"
-        }`}</FrameButton>
-        <FrameButton>{`🔼${
-          state.score >= 420 ? (state.score == 420 ? "" : "😈") : "😇"
-        }`}</FrameButton>
+        <FrameButton>{`🔽${downEmoji}`}</FrameButton>
+        <FrameButton>{`🔼${upEmoji}`}</FrameButton>
       </FrameContainer>
     </div>
   );
