@@ -29,7 +29,7 @@ export function FrameContainer<T extends FrameState = FrameState>({
   /** Either a relative e.g. "/frames" or an absolute path, e.g. "https://google.com/frames" */
   postUrl: string;
   /** The elements to include in the Frame */
-  children: Array<React.ReactElement<FrameElementType> | null>;
+  children: Array<any>;
   /** The current reducer state object, returned from useFramesReducer */
   state: T;
   previousFrame: PreviousFrame<T>;

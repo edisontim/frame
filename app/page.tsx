@@ -1,10 +1,8 @@
 import {
   FrameButton,
-  FrameReducer,
   NextServerPageProps,
   getFrameMessage,
   getPreviousFrame,
-  useFramesReducer,
   FrameImage,
   FrameInput,
 } from "frames.js/next/server";
@@ -15,12 +13,10 @@ import { OpenAI } from "openai";
 
 const openAi = new OpenAI();
 
-const HAPPY_IMG = "happy.jpeg";
-const SAD_IMG = "sad.jpeg";
 const HAPPY_URL = "https://i.ibb.co/Qmr7ChQ/happy.jpg";
 const SAD_URL = "https://i.ibb.co/YP4YzvG/sad.jpg";
 
-type State = {};
+type State = { firstClick: boolean };
 
 let currentScore = 420;
 
@@ -43,17 +39,18 @@ export default async function Home({
   }
 
   const previousScore = currentScore;
-  currentScore =
-    previousFrame.postBody?.untrustedData.buttonIndex == 1
-      ? currentScore - 1
-      : currentScore + 1;
+  if (previousFrame.prevState && !previousFrame.prevState.firstClick) {
+    currentScore =
+      previousFrame.postBody?.untrustedData.buttonIndex == 1
+        ? currentScore - 1
+        : currentScore + 1;
+  }
 
   let gptMsg = "Perfection";
 
   let upEmoji = "";
   let downEmoji = "";
   let url = HAPPY_URL;
-
   if (currentScore > 420) {
     upEmoji = "😈";
     downEmoji = "😇";
@@ -66,6 +63,7 @@ export default async function Home({
     gptMsg = "Oh no, bring me back to 420";
   }
 
+  let content = [<FrameButton key={0}>Lets keep this at 420!</FrameButton>];
   if (previousFrame.prevState) {
     const gptCompletion = await await openAi.chat.completions.create({
       model: "gpt-4-turbo-preview",
@@ -82,6 +80,11 @@ export default async function Home({
     });
     gptMsg = gptCompletion.choices[0]?.message.content ?? String(currentScore);
     gptMsg = gptMsg.slice(0, 27);
+    content = [
+      <FrameInput key={0} text={`${currentScore}: ${gptMsg}`} />,
+      <FrameButton key={1}>{`🔽${downEmoji}`}</FrameButton>,
+      <FrameButton key={2}>{`🔼${upEmoji}`}</FrameButton>,
+    ];
   }
 
   return (
@@ -89,14 +92,16 @@ export default async function Home({
       <p>Hello data</p>
       <FrameContainer
         postUrl="/frames"
-        state={{}}
+        state={
+          !previousFrame.prevState
+            ? { firstClick: true }
+            : { firstClient: false }
+        }
         previousFrame={previousFrame}
         pathname="/"
       >
-        <FrameImage src={url} aspectRatio="1.91:1"></FrameImage>
-        <FrameInput text={`${currentScore}: ${gptMsg}`}></FrameInput>
-        <FrameButton>{`🔽${downEmoji}`}</FrameButton>
-        <FrameButton>{`🔼${upEmoji}`}</FrameButton>
+        <FrameImage src={url} aspectRatio="1.91:1" />
+        {...content}
       </FrameContainer>
     </div>
   );
