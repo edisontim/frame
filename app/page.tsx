@@ -79,11 +79,7 @@ export default async function Home({
         <FrameImage>
           <div
             style={{
-              backgroundImage: `url(${
-                process.env.PUBLIC_URL
-                  ? process.env.PUBLIC_URL
-                  : "http://localhost:3000"
-              }/${img})`,
+              backgroundImage: `url(${imgUrl})`,
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
             }}
