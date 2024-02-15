@@ -5,9 +5,9 @@ import {
   getFrameMessage,
   getPreviousFrame,
   useFramesReducer,
+  FrameImage,
 } from "frames.js/next/server";
 
-import { FrameImage } from "./components/FrameImage";
 import { FrameContainer } from "./components/FrameContainer";
 
 import { OpenAI } from "openai";
@@ -96,43 +96,14 @@ export default async function Home({
 
   return (
     <div>
-      Hello data
+      <p>Hello data</p>
       <FrameContainer
         postUrl="/frames"
         state={state}
         previousFrame={previousFrame}
         pathname="/"
       >
-        <FrameImage>
-          <div
-            style={{
-              backgroundImage: `url(${url})`,
-              backgroundSize: "100% 100%",
-              backgroundRepeat: "no-repeat",
-            }}
-            tw="w-full h-full text-black flex flex-col justify-center items-center"
-          >
-            <p style={{ background: "white" }}>lets keep this at 420: </p>
-            <p
-              style={{
-                fontSize: "1.5em",
-                fontWeight: "bold",
-                background: "white",
-              }}
-            >
-              {currentScore}
-            </p>
-            <p
-              style={{
-                maxWidth: "60vw",
-                textAlign: "center",
-                background: "white",
-              }}
-            >
-              {gptMsg}
-            </p>
-          </div>
-        </FrameImage>
+        <FrameImage src={url} />
         <FrameButton>{`🔽${downEmoji}`}</FrameButton>
         <FrameButton>{`🔼${upEmoji}`}</FrameButton>
       </FrameContainer>

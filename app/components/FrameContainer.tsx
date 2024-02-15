@@ -9,9 +9,9 @@ import {
   FrameButtonAutomatedProps,
   FrameInput,
   FrameButtonPostRedirectProvidedProps,
+  FrameImage,
 } from "frames.js/next/server";
 import React from "react";
-import { FrameImage } from "./FrameImage";
 
 /**
  * A React functional component that Wraps a Frame and processes it, validating certain properties of the Frames spec, as well as adding other props. It also generates the postUrl.
@@ -123,15 +123,16 @@ export function FrameContainer<T extends FrameState = FrameState>({
     );
     throw new Error("post_url is more than 256 bytes");
   }
-  return (
+  const ret = (
     <>
       <meta name="fc:frame" content="vNext" />
+      {newTree}
       <meta name="og:title" content="420 blazit"></meta>
       <meta property="og:description" content="Keep this at 420"></meta>
       <meta name="fc:frame:post_url" content={postUrlFull} />
-      {newTree}
     </>
   );
+  return ret;
 }
 
 /** An internal component that handles FrameButtons that have type: 'post' */
