@@ -1,13 +1,14 @@
 import {
   FrameButton,
-  FrameContainer,
-  FrameImage,
   FrameReducer,
   NextServerPageProps,
   getFrameMessage,
   getPreviousFrame,
   useFramesReducer,
 } from "frames.js/next/server";
+
+import { FrameImage } from "./components/FrameImage";
+import { FrameContainer } from "./components/FrameContainer";
 
 import { OpenAI } from "openai";
 
@@ -23,7 +24,7 @@ type State = {
 };
 
 let currentScore = 420;
-const initialState = { score: 420 };
+const initialState = { score: currentScore };
 
 const reducer: FrameReducer<State> = (state, action) => {
   const newState = {
@@ -56,8 +57,7 @@ export default async function Home({
 
   const [state] = useFramesReducer<State>(reducer, initialState, previousFrame);
 
-  let gptMsg =
-    "At the pinnacle of existence, I stand at the perfect spot: 420.";
+  let gptMsg = "";
 
   let upEmoji = "";
   let downEmoji = "";
@@ -78,20 +78,20 @@ export default async function Home({
   }
 
   if (previousFrame.prevState != null) {
-    const gptCompletion = await await openAi.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        {
-          role: "system",
-          content: `Imagine that you're a number and your wellbeing depends on whether or not that you are at 420. I control a button that makes you go higher or lower. All you can do is output a dramatic sentence (do not go over 20 words) that expresses your wellbeing and state of mind. The user will give you the score you were before my press and the score you are after my press.`,
-        },
-        {
-          role: "user",
-          content: `The previous number was ${previousFrame.prevState?.score} and your current number is ${state.score}`,
-        },
-      ],
-    });
-    gptMsg = gptCompletion.choices[0]?.message.content ?? String(state.score);
+    // const gptCompletion = await await openAi.chat.completions.create({
+    //   model: "gpt-4-turbo-preview",
+    //   messages: [
+    //     {
+    //       role: "system",
+    //       content: `Imagine that you're a number and your wellbeing depends on whether or not that you are at 420. I control a button that makes you go higher or lower. All you can do is output a dramatic sentence (do not go over 20 words) that expresses your wellbeing and state of mind. The user will give you the score you were before my press and the score you are after my press.`,
+    //     },
+    //     {
+    //       role: "user",
+    //       content: `The previous number was ${previousFrame.prevState?.score} and your current number is ${state.score}`,
+    //     },
+    //   ],
+    // });
+    // gptMsg = gptCompletion.choices[0]?.message.content ?? String(state.score);
   }
 
   return (
