@@ -100,7 +100,18 @@ export default async function Home({
         pathname="/"
       >
         <FrameImage>
-          <div tw="w-full h-full text-black flex flex-col justify-center items-center">
+          <div
+            style={{
+              backgroundImage: `url(${
+                process.env.PUBLIC_URL
+                  ? process.env.PUBLIC_URL
+                  : "http://localhost:3000"
+              }/${img})`,
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+            }}
+            tw="w-full h-full text-black flex flex-col justify-center items-center"
+          >
             <p style={{ background: "white" }}>lets keep this at 420: </p>
             <p
               style={{
