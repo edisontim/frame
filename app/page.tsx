@@ -10,10 +10,6 @@ import {
 
 import { FrameContainer } from "./components/FrameContainer";
 
-import { OpenAI } from "openai";
-
-const openAi = new OpenAI();
-
 const HAPPY_IMG = "happy.jpeg";
 const SAD_IMG = "sad.jpeg";
 const HAPPY_URL = "https://i.ibb.co/Qmr7ChQ/happy.jpg";
@@ -82,21 +78,6 @@ export default async function Home({
   }
 
   if (previousFrame.prevState != null) {
-    const gptCompletion = await await openAi.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        {
-          role: "system",
-          content: `Imagine that you're a number and your wellbeing depends on whether or not that you are at 420. I control a button that makes you go higher or lower. All you can do is output a dramatic sentence (do not go over 20 words) that expresses your wellbeing and state of mind. The user will give you the score you were before my press and the score you are after my press.`,
-        },
-        {
-          role: "user",
-          content: `The previous number was ${previousFrame.prevState?.score} and your current number is ${state.score}`,
-        },
-      ],
-    });
-    gptMsg = gptCompletion.choices[0]?.message.content ?? String(state.score);
-
     content = [
       <FrameImage key={0}>
         <div
