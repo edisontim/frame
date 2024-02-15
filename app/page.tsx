@@ -63,6 +63,7 @@ export default async function Home({
   let downEmoji = "";
   let img = HAPPY_IMG;
   let url = HAPPY_URL;
+  let content = [<FrameImage src={url} />, <FrameButton>Load</FrameButton>];
   if (state.score > 420) {
     upEmoji = "😈";
     downEmoji = "😇";
@@ -78,6 +79,41 @@ export default async function Home({
   }
 
   if (previousFrame.prevState != null) {
+    content = [
+      <FrameImage>
+        <div
+          style={{
+            backgroundImage: `url(${url})`,
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+          }}
+          tw="w-full h-full text-black flex flex-col justify-center items-center"
+        >
+          <p style={{ background: "white" }}>lets keep this at 420: </p>
+          <p
+            style={{
+              fontSize: "1.5em",
+              fontWeight: "bold",
+              background: "white",
+            }}
+          >
+            {currentScore}
+          </p>
+          <p
+            style={{
+              maxWidth: "60vw",
+              textAlign: "center",
+              background: "white",
+            }}
+          >
+            {gptMsg}
+          </p>
+        </div>
+      </FrameImage>,
+      <FrameButton>{`🔽${downEmoji}`}</FrameButton>,
+      <FrameButton>{`🔼${upEmoji}`}</FrameButton>,
+    ];
+
     // const gptCompletion = await await openAi.chat.completions.create({
     //   model: "gpt-4-turbo-preview",
     //   messages: [
@@ -103,9 +139,7 @@ export default async function Home({
         previousFrame={previousFrame}
         pathname="/"
       >
-        <FrameImage src={url} />
-        <FrameButton>{`🔽${downEmoji}`}</FrameButton>
-        <FrameButton>{`🔼${upEmoji}`}</FrameButton>
+        {...content}
       </FrameContainer>
     </div>
   );
