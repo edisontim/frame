@@ -63,7 +63,10 @@ export default async function Home({
   let downEmoji = "";
   let img = HAPPY_IMG;
   let url = HAPPY_URL;
-  let content = [<FrameImage src={url} />, <FrameButton>Load</FrameButton>];
+  let content = [
+    <FrameImage key={0} src={url} />,
+    <FrameButton key={1}>Load</FrameButton>,
+  ];
   if (state.score > 420) {
     upEmoji = "😈";
     downEmoji = "😇";
@@ -80,7 +83,7 @@ export default async function Home({
 
   if (previousFrame.prevState != null) {
     content = [
-      <FrameImage>
+      <FrameImage key={0}>
         <div
           style={{
             backgroundImage: `url(${url})`,
@@ -110,8 +113,8 @@ export default async function Home({
           </p>
         </div>
       </FrameImage>,
-      <FrameButton>{`🔽${downEmoji}`}</FrameButton>,
-      <FrameButton>{`🔼${upEmoji}`}</FrameButton>,
+      <FrameButton key={1}>{`🔽${downEmoji}`}</FrameButton>,
+      <FrameButton key={2}>{`🔼${upEmoji}`}</FrameButton>,
     ];
 
     // const gptCompletion = await await openAi.chat.completions.create({
