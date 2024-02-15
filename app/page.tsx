@@ -9,12 +9,9 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 
-import { OpenAI } from "openai";
+// import { OpenAI } from "openai";
 
-const openAi = new OpenAI();
-
-const HAPPY_URL = "https://i.ibb.co/Qmr7ChQ/happy.jpg";
-const SAD_URL = "https://i.ibb.co/YP4YzvG/sad.jpg";
+// const openAi = new OpenAI();
 
 const HAPPY_IMG = "happy.jpeg";
 const SAD_IMG = "sad.jpeg";
@@ -23,15 +20,18 @@ type State = {
   score: number;
 };
 
+let currentScore = 420;
 const initialState = { score: 420 };
 
 const reducer: FrameReducer<State> = (state, action) => {
-  return {
+  const newState = {
     score:
       action.postBody?.untrustedData.buttonIndex == 1
         ? state.score - 1
         : state.score + 1,
   };
+  currentScore = newState.score;
+  return newState;
 };
 
 // This is a react server component only
@@ -46,7 +46,6 @@ export default async function Home({
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000/debug/hub"
         : process.env.HUB_URL,
-    fetchHubContext: true,
   });
 
   if (frameMessage && !frameMessage?.isValid) {
@@ -60,18 +59,15 @@ export default async function Home({
 
   let upEmoji = "";
   let downEmoji = "";
-  let imgUrl = HAPPY_URL;
   let img = HAPPY_IMG;
   if (state.score > 420) {
     upEmoji = "😈";
     downEmoji = "😇";
-    imgUrl = SAD_URL;
     img = SAD_IMG;
     gptMsg = "Oh no, please bring me back down to the ideal number.";
   } else if (state.score < 420) {
     upEmoji = "😇";
     downEmoji = "😈";
-    imgUrl = SAD_URL;
     img = SAD_IMG;
     gptMsg = "Oh no, please bring me back up to the ideal number.";
   }
@@ -124,7 +120,7 @@ export default async function Home({
                 background: "white",
               }}
             >
-              {state.score}
+              {currentScore}
             </p>
             {/* <p
               style={{
