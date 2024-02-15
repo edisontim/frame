@@ -76,24 +76,22 @@ export default async function Home({
     gptMsg = "Oh no, please bring me back up to the ideal number.";
   }
 
-  if (previousFrame.prevState != null) {
-    console.log("before call gpt");
-    const gptCompletion = await await openAi.chat.completions.create({
-      model: "gpt-4-turbo-preview",
-      messages: [
-        {
-          role: "system",
-          content: `Imagine that you're a number and your wellbeing depends on whether or not that you are at 420. I control a button that makes you go higher or lower. All you can do is output a dramatic sentence (do not go over 20 words) that expresses your wellbeing and state of mind. The user will give you the score you were before my press and the score you are after my press.`,
-        },
-        {
-          role: "user",
-          content: `The previous number was ${previousFrame.prevState?.score} and your current number is ${state.score}`,
-        },
-      ],
-    });
-    console.log("after call gpt");
-    gptMsg = gptCompletion.choices[0]?.message.content ?? String(state.score);
-  }
+  //   if (previousFrame.prevState != null) {
+  //     const gptCompletion = await await openAi.chat.completions.create({
+  //       model: "gpt-4-turbo-preview",
+  //       messages: [
+  //         {
+  //           role: "system",
+  //           content: `Imagine that you're a number and your wellbeing depends on whether or not that you are at 420. I control a button that makes you go higher or lower. All you can do is output a dramatic sentence (do not go over 20 words) that expresses your wellbeing and state of mind. The user will give you the score you were before my press and the score you are after my press.`,
+  //         },
+  //         {
+  //           role: "user",
+  //           content: `The previous number was ${previousFrame.prevState?.score} and your current number is ${state.score}`,
+  //         },
+  //       ],
+  //     });
+  //     gptMsg = gptCompletion.choices[0]?.message.content ?? String(state.score);
+  //   }
 
   console.log(gptMsg);
   return (
@@ -128,7 +126,7 @@ export default async function Home({
             >
               {state.score}
             </p>
-            <p
+            {/* <p
               style={{
                 maxWidth: "60vw",
                 textAlign: "center",
@@ -136,7 +134,7 @@ export default async function Home({
               }}
             >
               {gptMsg}
-            </p>
+            </p> */}
           </div>
         </FrameImage>
         <FrameButton>{`🔽${downEmoji}`}</FrameButton>
