@@ -15,6 +15,8 @@ import {
 
 const HAPPY_IMG = "happy.jpeg";
 const SAD_IMG = "sad.jpeg";
+const HAPPY_URL = "https://i.ibb.co/Qmr7ChQ/happy.jpg";
+const SAD_URL = "https://i.ibb.co/YP4YzvG/sad.jpg";
 
 type State = {
   score: number;
@@ -60,15 +62,18 @@ export default async function Home({
   let upEmoji = "";
   let downEmoji = "";
   let img = HAPPY_IMG;
+  let url = HAPPY_URL;
   if (state.score > 420) {
     upEmoji = "😈";
     downEmoji = "😇";
     img = SAD_IMG;
+    url = SAD_URL;
     gptMsg = "Oh no, please bring me back down to the ideal number.";
   } else if (state.score < 420) {
     upEmoji = "😇";
     downEmoji = "😈";
     img = SAD_IMG;
+    url = SAD_URL;
     gptMsg = "Oh no, please bring me back up to the ideal number.";
   }
 
@@ -102,11 +107,7 @@ export default async function Home({
         <FrameImage>
           <div
             style={{
-              backgroundImage: `url(${
-                process.env.PUBLIC_URL
-                  ? process.env.PUBLIC_URL
-                  : "http://localhost:3000"
-              }/${img})`,
+              backgroundImage: `url(${url})`,
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
             }}
